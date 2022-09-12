@@ -1,6 +1,7 @@
 import db from "./conectController.js";
 import joi from "joi";
 import dayjs from "dayjs";
+import { ObjectId} from "mongodb";
 
 const movimentacaoSchema = joi.object({
     descricao: joi.string().empty().required(),
@@ -66,5 +67,21 @@ async function puxarMovimentacoes(req,res){
         res.status(500).send(err.message);
     }
 }
+async function deletarMovimentacoes(req, res){
+    const {autorizacao} = req.headers;
+    const token = autorizacao?.replace('Bearer ', '');
+    if(!token) return res.sendStatus(401);
+    const {id} = req.params
+    try{
+        const sessao = await db.collection("sessoes").find({ "token": autorizacao }).toArray();
+        if(sessao.length===0){
+            return res.sendStatus(401);
+        }
+        await db.collection("movimentacoes").deleteOne({"_id": ObjectId(id)})
+        res.sendStatus(200)
+    }catch(err){
+        res.status(500).send(err.message);
+    }
+}
 
-export {MovimentacaoUsuario, puxarMovimentacoes};
+export {MovimentacaoUsuario, puxarMovimentacoes, deletarMovimentacoes};

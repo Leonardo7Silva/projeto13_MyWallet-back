@@ -4,7 +4,6 @@ import db from "./conectController.js";
 import { v4 as uuid } from 'uuid';
 
 
-
 const cadastroSchema = joi.object({
     nome: joi.string().empty().required(),
     email: joi.string().empty().required(),

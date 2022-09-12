@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import {cadastrarUsuario, logarUsuario} from "./controllers/authController.js"
-import {MovimentacaoUsuario, puxarMovimentacoes} from "./controllers/movimentController.js"
+import {MovimentacaoUsuario, puxarMovimentacoes, deletarMovimentacoes} from "./controllers/movimentController.js"
 
 const app = express();
 app.use(express.json());
@@ -18,7 +18,8 @@ app.post("/login", logarUsuario);
 //movimentacoes
 
 app.post("/movimentacoes", MovimentacaoUsuario);
-app.get("/movimentacoes", puxarMovimentacoes)
+app.get("/movimentacoes", puxarMovimentacoes);
+app.delete("/movimentacoes/:id", deletarMovimentacoes);
 
 
 app.listen(5000, ()=>console.log("Ouvindo na porta 5000"));
